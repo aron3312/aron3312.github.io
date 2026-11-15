@@ -23,15 +23,45 @@
         flex: 1;
       }
     </style>
+    <!-- What shows while the bundle downloads (a few MB): React replaces #root's contents when it starts.
+         The web demo then shows the same screen (game/demo/LoadingScreen.tsx) until its 3D models are in. -->
+    <style>
+      body { margin: 0; background: #cfe8ee; }
+      .boot { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+        font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", sans-serif; color: #4a2f1b; }
+      .boot-title { font-size: 28px; font-weight: 900; }
+      .boot-text { font-size: 16px; font-weight: 700; color: #7a5a3c; }
+      .boot-dots { display: flex; gap: 8px; margin-top: 6px; }
+      .boot-dots i { width: 10px; height: 10px; border-radius: 5px; background: #f2b632; animation: boot 1.2s infinite ease-in-out; }
+      .boot-dots i:nth-child(2) { animation-delay: 0.2s; }
+      .boot-dots i:nth-child(3) { animation-delay: 0.4s; }
+      @keyframes boot { 0%, 80%, 100% { opacity: 0.25; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-6px); } }
+    </style>
   <link rel="icon" href="/hamelin/play/favicon.ico" /></head>
 
   <body>
-    <!-- Use static rendering with Expo Router to support running without JavaScript. -->
     <noscript>
       You need to enable JavaScript to run this app.
     </noscript>
     <!-- The root element for your Expo app. -->
-    <div id="root"></div>
-  <script src="/hamelin/play/_expo/static/js/web/entry-b70d8fb552c2ac77b90c5a95b344c792.js" defer></script>
+    <div id="root">
+      <div class="boot">
+        <div class="boot-title" id="boot-title">Hamelin Squeaks</div>
+        <div class="boot-text" id="boot-text">Loading…</div>
+        <div class="boot-dots"><i></i><i></i><i></i></div>
+      </div>
+    </div>
+    <script>
+      // The same language rule as game/i18n.ts: Chinese for any Chinese, English otherwise (?lang= forces one).
+      (function () {
+        var forced = new URLSearchParams(location.search).get('lang');
+        var zh = forced === 'zh' || forced === 'en' ? forced === 'zh' : /^zh/i.test(navigator.language || '');
+        if (!zh) return;
+        document.documentElement.lang = 'zh-Hant';
+        document.getElementById('boot-title').textContent = '魔笛鼠鼠回家囉';
+        document.getElementById('boot-text').textContent = '載入中…';
+      })();
+    </script>
+  <script src="/hamelin/play/_expo/static/js/web/entry-f7fdd318e88b6ed0a47dfcc45d5bd077.js" defer></script>
 </body>
 </html>
